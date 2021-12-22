@@ -1,30 +1,32 @@
 ﻿using Biblioteca.Domain.Entities;
 using Biblioteca.Domain.Interfaces.Application;
+using Biblioteca.Domain.Interfaces.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Biblioteca.Application.Applications
 {
     public class LivroApplication : ILivroApplication
     {
-        public Task<bool> Apagar(Guid id)
+        private readonly ILivroRepository _repo;
+        public LivroApplication(ILivroRepository repo)
         {
-            throw new NotImplementedException();
+            _repo = repo;
         }
+        public async Task<bool> Apagar(string id)
+            => await _repo.Apagar(id);
 
-        public Task<bool> Atualizar(Livro livro)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> Atualizar(Livro livro)
+            => await _repo.Atualizar(livro);
 
-        public Task ConsultarTodos()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<Livro>> ConsultarPorTitulo(string titulo)
+            => _repo.ConsultarPorTitulo(titulo);
 
-        public Task<bool> Inserir(Livro livro)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> Inserir(Livro livro)
+            => await _repo.Inserir(livro);
+
+        async Task<IEnumerable<Livro>> ILivroApplication.ConsultarTodos()
+            => await _repo.ConsultarTodos();
     }
 }

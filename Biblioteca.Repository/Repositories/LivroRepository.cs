@@ -1,7 +1,10 @@
 ﻿using Biblioteca.Domain.Entities;
 using Biblioteca.Domain.Interfaces.Repositories;
 using Biblioteca.Repository.Configuration;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Biblioteca.Repository.Repositories
@@ -14,24 +17,63 @@ namespace Biblioteca.Repository.Repositories
         {
             _db = mongoDBContext;
         }
-        public Task<bool> Apagar(Guid id)
+        public async Task<bool> Apagar(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var filter = Builders<Livro>.Filter.Eq(x => x.Id, id);
+                await _db.Livros.DeleteOneAsync(filter);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
-        public Task<bool> Atualizar(Livro livro)
+        public async Task<bool> Atualizar(Livro livro)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var filter = Builders<Livro>.Filter.Eq(x => x.Id, livro.Id);
+                var update = Builders<Livro>.Update.Set(x => x.Titulo, livro.Titulo);
+                await _db.Livros.UpdateOneAsync(filter, update);
+                return true;
+            }catch(Exception ex)
+            {
+                return false;
+            }
         }
 
-        public Task<bool> Inserir(Livro livro)
+        public async Task<IEnumerable<Livro>> ConsultarPorTitulo(string titulo)
         {
-            throw new NotImplementedException();
+            var filtro = Builders<Livro>.Filter.Eq(x => x.Titulo, titulo);
+
+            return await _db.Livros.Find(filtro)
+                .ToListAsync();
         }
 
-        Task ILivroRepository.ConsultarTodos()
+        public async Task<IEnumerable<Livro>> ConsultarTodos()
+            => await _db.Livros.Find(new BsonDocument()).SortBy(x => x.Titulo).ToListAsync();
+        //new bsonDocumento é usado quando não queremos passar nenhum filtro no método find
+
+        public async Task<bool> Inserir(Livro livro)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _db.Livros.InsertOneAsync(livro);
+
+                if (livro.Id != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
     }
 }
