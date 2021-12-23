@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FluentValidation.AspNetCore;
 using System;
 
 namespace Biblioteca
@@ -21,15 +22,22 @@ namespace Biblioteca
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv =>
+            {
+                fv.DisableDataAnnotationsValidation = false;
+                fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
 
             services.ResolveRepositoryDependencies();
             services.ResolveApplicationDependencies();
+            services.ResolveValidationDependencies();
+
             services.AddScoped<MongoDBContext>();
 
             MongoDBContext.ConnectionString = Configuration.GetSection("MongoConnection:ConnectionString").Value;
             MongoDBContext.DatabaseName = Configuration.GetSection("MongoConnection:Database").Value;
             MongoDBContext.IsSSL = Convert.ToBoolean(this.Configuration.GetSection("MongoConnection:IsSSL").Value);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
