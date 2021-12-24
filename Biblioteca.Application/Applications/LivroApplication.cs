@@ -1,7 +1,8 @@
-﻿using Biblioteca.Domain.Entities;
+﻿using AutoMapper;
+using Biblioteca.Domain.Entities;
 using Biblioteca.Domain.Interfaces.Application;
 using Biblioteca.Domain.Interfaces.Repositories;
-using System;
+using Biblioteca.Domain.ViewModels.Livro;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,10 +11,14 @@ namespace Biblioteca.Application.Applications
     public class LivroApplication : ILivroApplication
     {
         private readonly ILivroRepository _repo;
-        public LivroApplication(ILivroRepository repo)
+        private readonly IMapper _mapper;
+
+        public LivroApplication(ILivroRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
+
         public async Task<bool> Apagar(string id)
             => await _repo.Apagar(id);
 
@@ -23,8 +28,11 @@ namespace Biblioteca.Application.Applications
         public Task<IEnumerable<Livro>> ConsultarPorTitulo(string titulo)
             => _repo.ConsultarPorTitulo(titulo);
 
-        public async Task<bool> Inserir(Livro livro)
-            => await _repo.Inserir(livro);
+        public async Task<bool> Inserir(LivroParaInserirVM livroParaInserir)
+        {
+            var livro = _mapper.Map<Livro>(livroParaInserir);
+            return await _repo.Inserir(livro);
+        }
 
         async Task<IEnumerable<Livro>> ILivroApplication.ConsultarTodos()
             => await _repo.ConsultarTodos();

@@ -1,8 +1,8 @@
 ﻿using Biblioteca.Application.Applications;
 using Biblioteca.Application.Validation;
-using Biblioteca.Domain.Entities;
 using Biblioteca.Domain.Interfaces.Application;
 using Biblioteca.Domain.Interfaces.Repositories;
+using Biblioteca.Domain.ViewModels.Livro;
 using Biblioteca.Repository.Repositories;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +28,7 @@ namespace Biblioteca.Api.IoC
 
         public static IServiceCollection ResolveValidationDependencies(this IServiceCollection services)
         {
-            services.AddTransient<IValidator<Livro>, LivroValidator>();
+            services.AddTransient<IValidator<LivroParaInserirVM>, LivroParaInserirVMValidator>();
 
             return services;
         }

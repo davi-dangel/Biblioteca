@@ -1,5 +1,6 @@
 ﻿using Biblioteca.Domain.Entities;
 using Biblioteca.Domain.Interfaces.Application;
+using Biblioteca.Domain.ViewModels.Livro;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -33,9 +34,9 @@ namespace Biblioteca.Api.Controllers
         }
 
         [HttpPost(Name = nameof(Inserir))]
-        public async Task<IActionResult> Inserir([FromBody]Livro livro)
+        public async Task<IActionResult> Inserir([FromBody]LivroParaInserirVM livro)
         {
-            if(livro == null)
+            if(livro is null)
                 return BadRequest("Request inválido");
 
             try

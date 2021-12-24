@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FluentValidation.AspNetCore;
 using System;
+using Biblioteca.Domain.Mapper;
 
 namespace Biblioteca
 {
@@ -38,6 +39,7 @@ namespace Biblioteca
             MongoDBContext.DatabaseName = Configuration.GetSection("MongoConnection:Database").Value;
             MongoDBContext.IsSSL = Convert.ToBoolean(this.Configuration.GetSection("MongoConnection:IsSSL").Value);
 
+            services.MapperConfig();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

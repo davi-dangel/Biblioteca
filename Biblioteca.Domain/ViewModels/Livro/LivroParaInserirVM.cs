@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Biblioteca.Domain.ViewModels.Livro
 {
@@ -10,8 +7,14 @@ namespace Biblioteca.Domain.ViewModels.Livro
     {
         public string Titulo { get; set; }
         public string Subtitulo { get; set; }
-        public string Autor { get; set; }
+        public List<string> Autores { get; set; }
+        public DateTime AnoPublicacao { get; set; }
         public int NumPaginas { get; set; }
-        
+        public string Editora { get; set; }
+        public int Edicao { get; set; }
+        public List<string> Categorias { get; set; }
+        public string Status { get; set; }
+        public DateTime DataLeituraFim { get; set; }
+
     }
 }
