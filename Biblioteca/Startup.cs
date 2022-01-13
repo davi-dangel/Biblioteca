@@ -19,10 +19,19 @@ namespace Biblioteca
         }
 
         public IConfiguration Configuration { get; }
+        public string[] Origins = new string[] { "http://localhost:4200" };
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => builder.WithOrigins(Origins)
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod()
+                    );
+            });
+
             services.AddControllers().AddFluentValidation(fv =>
             {
                 fv.DisableDataAnnotationsValidation = false;
@@ -50,9 +59,13 @@ namespace Biblioteca
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
+
+            //app.UseOptions();
 
             app.UseAuthorization();
 

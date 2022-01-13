@@ -55,7 +55,7 @@ namespace Biblioteca.Repository.Repositories
         }
 
         public async Task<IEnumerable<Livro>> ConsultarTodos()
-            => await _db.Livros.Find(new BsonDocument()).SortBy(x => x.Titulo).ToListAsync();
+            => await _db.Livros.Find(new BsonDocument()).SortByDescending(x => x.DataCadastro).ToListAsync();
         //new bsonDocumento é usado quando não queremos passar nenhum filtro no método find
 
         public async Task<bool> Inserir(Livro livro)

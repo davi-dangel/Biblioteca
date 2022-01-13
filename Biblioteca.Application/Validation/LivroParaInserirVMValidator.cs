@@ -20,7 +20,7 @@ namespace Biblioteca.Application.Validation
             RuleFor(x => x.AnoPublicacao)
                 .NotNull().WithMessage("Ano da publicação deve ser cadastrado")
                 .NotEmpty().WithMessage("Ano da publicação deve ser cadastrado")
-                .LessThanOrEqualTo(DateTime.Today).WithMessage("Data inserida não pode ser superior a data atual");
+                .LessThanOrEqualTo(DateTime.Today.Year).WithMessage("Data inserida não pode ser superior a data atual");
 
             RuleFor(x => x.NumPaginas)
                 .NotEmpty().WithMessage("O número de páginas deve ser inserido")
@@ -38,7 +38,7 @@ namespace Biblioteca.Application.Validation
                 .NotNull().WithMessage("Pelo menos uma categoria deve ser cadastrada")
                 .NotEmpty().WithMessage("Pelo menos uma categoria deve ser cadastrada");
 
-            RuleFor(x => x.Status)
+            RuleFor(x => x.LeituraStatus)
                 .NotNull().WithMessage("O status da leitura deve ser cadastrado")
                 .NotEmpty().WithMessage("O status da leitura deve ser cadastrado")
                 .Must(BeAValidStatus).WithMessage("Status não é valido");

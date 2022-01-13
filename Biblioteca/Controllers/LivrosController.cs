@@ -1,13 +1,14 @@
 ﻿using Biblioteca.Domain.Entities;
 using Biblioteca.Domain.Interfaces.Application;
 using Biblioteca.Domain.ViewModels.Livro;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Biblioteca.Api.Controllers
 {
+    [EnableCors]
     [Route("api/livros")]
     public class LivrosController : MainController
     {
@@ -17,6 +18,7 @@ namespace Biblioteca.Api.Controllers
             _livroApp = livroApplication;
         }
 
+        //TODO: MELHORAR A ATUALIZAÇÃO
         [HttpPut(Name = nameof(Atualizar))]
         public async Task<IActionResult> Atualizar([FromBody] Livro livro)
         {
@@ -36,13 +38,10 @@ namespace Biblioteca.Api.Controllers
         [HttpPost(Name = nameof(Inserir))]
         public async Task<IActionResult> Inserir([FromBody]LivroParaInserirVM livro)
         {
-            if(livro is null)
-                return BadRequest("Request inválido");
-
             try
             {
                 await _livroApp.Inserir(livro);
-                return Ok("Cheguei aqui");
+                return Ok();
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -58,7 +57,7 @@ namespace Biblioteca.Api.Controllers
                 return Ok(livros);
             }catch (Exception ex)
             {
-                return BadRequest("Não foi possível buscar os livros");
+                return BadRequest(ex.Message);
             }
         }
 
